@@ -1,0 +1,40 @@
+using MagicFilesLib;
+using Moq;
+using NUnit.Framework;
+using System.Collections.Generic;
+
+namespace DirectoryExplorer.Tests
+{
+    [TestFixture]
+    public class DirectoryExplorerTests
+    {
+        private Mock<IDirectoryExplorer> mockDirectory;
+
+        private readonly string file1 = "file.txt";
+        private readonly string file2 = "file2.txt";
+
+        [OneTimeSetUp]
+        public void Init()
+        {
+            mockDirectory = new Mock<IDirectoryExplorer>();
+
+            mockDirectory.Setup(x =>
+                x.GetFiles(It.IsAny<string>()))
+                .Returns(new List<string>()
+                {
+                    file1,
+                    file2
+                });
+        }
+
+        [TestCase]
+        public void GetFilesTest()
+        {
+            var files = mockDirectory.Object.GetFiles("C:\\");
+
+            Assert.IsNotNull(files);
+            Assert.AreEqual(2, files.Count);
+            CollectionAssert.Contains(files, file1);
+        }
+    }
+}
