@@ -1,0 +1,87 @@
+using NUnit.Framework;
+using CalcLibrary;
+using System;
+
+namespace CalcLibrary.Tests
+{
+    [TestFixture]
+    public class CalculatorTests
+    {
+        private Calculator calculator;
+
+        [SetUp]
+        public void Setup()
+        {
+            calculator = new Calculator();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            calculator = null;
+        }
+
+
+        [TestCase(20, 10, 10)]
+        [TestCase(15, 5, 10)]
+        [TestCase(-5, -5, 0)]
+        [TestCase(10, 20, -10)]
+        public void TestSubtract(int a, int b, int expected)
+        {
+            int actual = calculator.Subtract(a, b);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestCase(5, 5, 25)]
+        [TestCase(10, 2, 20)]
+        [TestCase(-5, 2, -10)]
+        [TestCase(0, 10, 0)]
+        public void TestMultiply(int a, int b, int expected)
+        {
+            int actual = calculator.Multiply(a, b);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [TestCase(20, 2, 10)]
+        [TestCase(15, 3, 5)]
+        [TestCase(100, 10, 10)]
+        public void TestDivision(int a, int b, int expected)
+        {
+            int actual = calculator.Divide(a, b);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+
+        [Test]
+        public void TestDivisionByZero()
+        {
+            try
+            {
+                calculator.Divide(20, 0);
+
+                Assert.Fail("Division by zero");
+            }
+            catch (ArgumentException ex)
+            {
+                Assert.AreEqual("Division by zero", ex.Message);
+            }
+        }
+
+        [Test]
+        public void TestAddAndClear()
+        {
+            calculator.Add(20, 30);
+
+            Assert.AreEqual(50, calculator.GetResult);
+
+            calculator.AllClear();
+
+            Assert.AreEqual(0, calculator.GetResult);
+        }
+    }
+}
